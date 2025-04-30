@@ -100,6 +100,22 @@ export default async function makeCopies(
               ObjectKey: destinationKey,
               ContentType: "REPLACE",
             };
+          } else if (c.Mode === "GCP/GCS") {
+            console.log(
+              JSON.stringify({
+                Copy: {
+                  Source: `gs://${sourceBucketName}/${sourceObjectName}`,
+                  Destination: `gs://${c.BucketName}/${destinationKey}`,
+                },
+              }),
+            );
+
+            return {
+              Type: "Copy",
+              Mode: c.Mode,
+              BucketName: c.BucketName,
+              ObjectKey: destinationKey,
+            };
           } else {
             throw new Error("Unknown mode");
             // TODO Add more destination modes
